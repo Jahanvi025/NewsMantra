@@ -1,0 +1,51 @@
+/* Neon Cursor Styles */
+
+.neon-cursor-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none; /* Prevent the cursor from interfering with clicks */
+    z-index: 9999; /* Make sure it is on top of everything */
+    width: 100%;
+    height: 100%;
+  }
+  
+  .cursor-main {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #F7374F; /* Neon orange */
+    border: 2px solid #f6243d;
+    pointer-events: none; /* Make sure the cursor doesn't interfere with clicks */
+  }
+  
+  .cursor-trail {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgb(236, 101, 23);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  
+  .cursor-glow {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgb(236, 101, 23);
+    opacity: 0.2;
+    pointer-events: none;
+  }
+  
+  /* You can add additional styling for hover states here */
+  
+  .cursor-main:hover,
+  .cursor-trail:hover,
+  .cursor-glow:hover {
+    background: #F7374F; /* Lighter neon glow */
+    border-color: #F7374F;
+  }
+  
