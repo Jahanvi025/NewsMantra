@@ -8,7 +8,7 @@ const About = () => {
           About NewMantra News App
         </h1>
         <p className=" text-black mt-4 font-[Supreme]">
-          Your one-stop platform to stay updated with worldwide news and explore different perspectives from various newspapers.
+          Your one-stop platform to stay updated with worldwide news and explore different perspectives from various newspapers
         </p>
       </div>
 

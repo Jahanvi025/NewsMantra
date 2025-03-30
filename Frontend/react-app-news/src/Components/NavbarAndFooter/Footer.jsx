@@ -2,8 +2,8 @@ import React from 'react'
 
 const Footer = () => {
   return (
-    <div>
-      
+    <div className='relative bg-[#F7374F] min-w-max w-full'>
+       
     </div>
   )
 }

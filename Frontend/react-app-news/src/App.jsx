@@ -14,6 +14,7 @@ import About from "./Components/About/About";
 import Login from "./Components/Authentication/Login";
 import Register from "./Components/Authentication/Register";
 import NeonCursor from "./Components/StylesFolder/NeonCursor";
+import CreateAndUpdateNote from "./Components/Notes/CreateAndUpdateNote";
 
 function App() {
 
@@ -51,6 +52,7 @@ function App() {
       element:
         <div>
           <Navbar />
+          <CreateAndUpdateNote />
           <Notes />
           <Footer />
         </div>
