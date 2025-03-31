@@ -1,6 +1,6 @@
 
 import { useRef, useState, useEffect } from "react"
-import { Link, NavLink } from "react-router-dom"
+import { Link, NavLink, useNavigate } from "react-router-dom"
 import { ChevronDown, Menu, X } from "lucide-react"
 import logo from "../../assets/images/logo.png"
 
@@ -14,32 +14,33 @@ const Navbar = () => {
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen)
 
   const closeMenu = () => setIsOpen(false)
+  const navigate = useNavigate();
 
-// Close the sidebar when clicking outside
-useEffect(() => {
-  const handleClickOutside = (event) => {
-    if (isOpen && !event.target.closest(".sidebar") && !event.target.closest(".menu-toggle")) {
-      setIsOpen(false)
+  // Close the sidebar when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isOpen && !event.target.closest(".sidebar") && !event.target.closest(".menu-toggle")) {
+        setIsOpen(false)
+      }
     }
-  }
 
-  document.addEventListener("mousedown", handleClickOutside)
-  return () => {
-    document.removeEventListener("mousedown", handleClickOutside)
-  }
-}, [isOpen])
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [isOpen])
 
-// Prevent body scrolling when sidebar is open
-useEffect(() => {
-  if (isOpen) {
-    document.body.style.overflow = "hidden"
-  } else {
-    document.body.style.overflow = "auto"
-  }
-  return () => {
-    document.body.style.overflow = "auto"
-  }
-}, [isOpen])
+  // Prevent body scrolling when sidebar is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = "auto"
+    }
+    return () => {
+      document.body.style.overflow = "auto"
+    }
+  }, [isOpen])
 
   const newspapers = [
     { name: "Times of India", href: "/news/times-of-india" },
@@ -50,7 +51,7 @@ useEffect(() => {
   ]
 
   // Reusable NavLink component to avoid repetition
-  const NavItem = ({ to, children, onClick = () => {} }) => (
+  const NavItem = ({ to, children, onClick = () => { } }) => (
     <NavLink
       to={to}
       className={({ isActive }) =>
@@ -65,11 +66,10 @@ useEffect(() => {
   // Reusable button component
   const AuthButton = ({ variant, onClick, children }) => (
     <button
-      className={`font-[Supreme] text-[15px] font-normal ${
-        variant === "primary"
-          ? "text-white bg-black border border-neutral-200 transition-colors hover:text-[#F7374F]"
-          : "text-black border border-neutral-200 transition-colors hover:bg-neutral-100"
-      } px-4 py-2 rounded-sm`}
+      className={`font-[Supreme] text-[15px] font-normal ${variant === "primary"
+        ? "text-white bg-black border border-neutral-200 transition-colors hover:text-[#F7374F]"
+        : "text-black border border-neutral-200 transition-colors hover:bg-neutral-100"
+        } px-4 py-2 rounded-sm`}
       onClick={onClick}
     >
       {children}
@@ -79,7 +79,7 @@ useEffect(() => {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-gray-300 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
 
-        <div className="flex flex-row h-16 items-center justify-between px-4 md:px-14">
+      <div className="flex flex-row h-16 items-center justify-between px-4 md:px-14">
         {/* Logo and Toggle Button Group */}
         <div className="flex items-center space-x-2">
           {/* Mobile Menu Toggle Button with Animation */}
@@ -156,12 +156,13 @@ useEffect(() => {
             </AuthButton>
           ) : (
             <>
-              <AuthButton variant="outline" onClick={closeMenu}>
+              <AuthButton variant="outline" onClick={() => navigate("/login")}>
                 Login
               </AuthButton>
-              <AuthButton variant="primary" onClick={closeMenu}>
+              <AuthButton variant="primary" onClick={() => navigate("/register")}>
                 Sign Up
               </AuthButton>
+
             </>
           )}
         </div>
@@ -179,9 +180,8 @@ useEffect(() => {
 
         {/* Sidebar */}
         <div
-          className={`sidebar fixed top-0 left-0 h-full w-64 bg-white z-50 transform transition-transform duration-300 ease-in-out ${
-            isOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
+          className={`sidebar fixed top-0 left-0 h-full w-64 bg-white z-50 transform transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-full"
+            }`}
         >
           <div className="p-4 border-b border-gray-200 flex items-center justify-between">
             <div className="flex items-center space-x-2">
@@ -209,9 +209,8 @@ useEffect(() => {
               </div>
 
               <div
-                className={`pl-4 space-y-1 overflow-hidden transition-all duration-300 ${
-                  isDropdownOpen ? "max-h-96 opacity-100 mt-2" : "max-h-0 opacity-0"
-                }`}
+                className={`pl-4 space-y-1 overflow-hidden transition-all duration-300 ${isDropdownOpen ? "max-h-96 opacity-100 mt-2" : "max-h-0 opacity-0"
+                  }`}
               >
                 {newspapers.map((newspaper) => (
                   <Link
@@ -245,12 +244,13 @@ useEffect(() => {
                 </AuthButton>
               ) : (
                 <>
-                  <AuthButton variant="outline" onClick={closeMenu}>
+                  <AuthButton variant="outline" onClick={() => navigate("/login")}>
                     Login
                   </AuthButton>
-                  <AuthButton variant="primary" onClick={closeMenu}>
+                  <AuthButton variant="primary" onClick={() => navigate("/register")}>
                     Sign Up
                   </AuthButton>
+
                 </>
               )}
             </div>
