@@ -2,11 +2,11 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./Config/db.js";
-
+import authRouter from "./routes/authRouter.js"
 
 const app = express();
 dotenv.config();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 
 // Enable CORS for frontend communication
 app.use(cors());
@@ -21,6 +21,8 @@ connectDB();
 app.get("/", (req, res) => {
     res.send("Welcome to the API!");
 });
+
+app.use('/auth', authRouter);
 
 // 🚀 Start server
 app.listen(PORT, () => {
