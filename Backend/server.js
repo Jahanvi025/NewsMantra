@@ -3,6 +3,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./Config/db.js";
 import authRouter from "./routes/authRouter.js"
+import articleRouter from "./routes/articleRoute.js"
+import newsRouter from "./routes/NewsRoute.js"
 
 const app = express();
 dotenv.config();
@@ -23,6 +25,8 @@ app.get("/", (req, res) => {
 });
 
 app.use('/auth', authRouter);
+app.use('/article', articleRouter);
+app.use("/api", newsRouter);
 
 // 🚀 Start server
 app.listen(PORT, () => {

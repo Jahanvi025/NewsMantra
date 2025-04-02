@@ -14,6 +14,7 @@
     "@tailwindcss/vite": "^4.0.17",
     "axios": "^1.8.4",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "framer-motion": "^12.6.2",
     "lucide-react": "^0.485.0",
     "ogl": "^1.0.11",

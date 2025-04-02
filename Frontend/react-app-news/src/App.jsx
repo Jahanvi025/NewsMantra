@@ -15,6 +15,7 @@ import Login from "./Components/Authentication/Login";
 import Register from "./Components/Authentication/Register";
 import NeonCursor from "./Components/StylesFolder/NeonCursor";
 import CreateAndUpdateNote from "./Components/Notes/CreateAndUpdateNote";
+import CurrentNewsPage from "./Components/CurrentAffairs/CurrentNewsPage";
 
 function App() {
 
@@ -35,6 +36,15 @@ function App() {
         <div>
           <Navbar />
           <AllNews />
+          <Footer />
+        </div>
+    },
+    {
+      path: '/news/currentnews/:id',
+      element:
+        <div>
+          <Navbar />
+          <CurrentNewsPage/>
           <Footer />
         </div>
     },

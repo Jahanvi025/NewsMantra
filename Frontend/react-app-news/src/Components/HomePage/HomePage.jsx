@@ -53,12 +53,12 @@ const HomePage = () => {
 
         {/* Right Section */}
         <motion.div 
-          className="flex flex-col gap-3 text-center items-end md:text-left w-5/6 h-[96vh]"
+          className="flex flex-col gap-3 text-center items-end md:text-left w-5/6 h-[90vh]"
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 1 }}
         >
-          <img src={newsimg} alt="newsimg" loading='lazy' className=''/>
+          <img src={newsimg} alt="newsimg" loading='lazy' className='object-cover'/>
         </motion.div>
       </div>
     </div>
