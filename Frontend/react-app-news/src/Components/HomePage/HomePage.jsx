@@ -13,7 +13,7 @@ const HomePage = () => {
 
   return (
     <div className='relative'>
-      <div className='flex flex-col md:flex-row justify-end items-start gap-6 md:gap-0'>
+      <div className=' flex flex-col md:flex-row justify-end items-start gap-6 md:gap-0'>
 
         {/* Left Section */}
         <motion.div 

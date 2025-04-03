@@ -3,18 +3,22 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-// Cache data to prevent excessive API requests (valid for 10 mins)
-let cachedData = null;
-let lastFetchTime = 0;
+// Cache to prevent excessive API requests (valid for 10 mins)
+let cachedCurrentAffairs = null;
+let cachedFamousHeadlines = null;
+let lastFetchTimeCurrentAffairs = 0;
+let lastFetchTimeFamousHeadlines = 0;
 
-const currentAffairs = async (req, res) => {
-  const CACHE_DURATION = 10 * 60 * 1000; // 10 minutes
+const CACHE_DURATION = 10 * 60 * 1000; // 10 minutes
+
+// 📰 Fetch Current Affairs
+const fetchCurrentAffairs = async (req, res) => {
   const now = Date.now();
 
   try {
     // Serve cached data if recent
-    if (cachedData && now - lastFetchTime < CACHE_DURATION) {
-      return res.json(cachedData);
+    if (cachedCurrentAffairs && now - lastFetchTimeCurrentAffairs < CACHE_DURATION) {
+      return res.json(cachedCurrentAffairs);
     }
 
     const response = await axios.get(
@@ -22,18 +26,46 @@ const currentAffairs = async (req, res) => {
     );
 
     if (!response.data.articles || response.data.articles.length === 0) {
-      return res.status(404).json({ message: "No articles found." });
+      return res.status(404).json({ message: "No current affairs found." });
     }
 
     // Store cache
-    cachedData = response.data;
-    lastFetchTime = now;
+    cachedCurrentAffairs = response.data;
+    lastFetchTimeCurrentAffairs = now;
 
     res.json(response.data);
   } catch (error) {
-    console.error("Error fetching news:", error.message);
-    res.status(500).json({ message: "Error fetching news" });
+    console.error("Error fetching current affairs:", error.message);
+    res.status(500).json({ message: "Error fetching current affairs" });
   }
 };
 
-export { currentAffairs };
+// 🔥 Fetch Famous Headlines (India)
+const fetchFamousHeadlines = async (req, res) => {
+  const now = Date.now();
+
+  try {
+    // Serve cached data if recent
+    if (cachedFamousHeadlines && now - lastFetchTimeFamousHeadlines < CACHE_DURATION) {
+      return res.json(cachedFamousHeadlines);
+    }
+
+    const response = await axios.get(
+      `https://newsapi.org/v2/top-headlines?country=us&pageSize=40&apiKey=${process.env.NEWS_API_KEY}`
+    );
+
+    if (!response.data.articles || response.data.articles.length === 0) {
+      return res.status(404).json({ message: "No famous headlines found." });
+    }
+
+    cachedFamousHeadlines = response.data;
+    lastFetchTimeFamousHeadlines = now;
+
+    res.json(response.data);
+  } catch (error) {
+    console.error("Error fetching famous headlines:", error.message);
+    res.status(500).json({ message: "Error fetching famous headlines" });
+  }
+};
+
+export { fetchCurrentAffairs, fetchFamousHeadlines };

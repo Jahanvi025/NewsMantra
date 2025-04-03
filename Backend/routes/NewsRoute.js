@@ -1,8 +1,9 @@
 import express, {Router} from "express";
-import { currentAffairs } from "../Controllers/NewsController.js";
+import { fetchCurrentAffairs, fetchFamousHeadlines } from "../Controllers/NewsController.js";
 
 const router = express.Router();
 
-router.get("/current-affairs", currentAffairs);
+router.get("/current-affairs", fetchCurrentAffairs);
+router.get("/famous-headlines", fetchFamousHeadlines);
 
 export default router;
