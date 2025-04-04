@@ -1,4 +1,5 @@
 import react from "react";
+import { Toaster } from "react-hot-toast"
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import HomePage from "./Components/HomePage/HomePage";
 import CurrentAffairs from "./Components/CurrentAffairs/CurrentAffairs";
@@ -122,6 +123,8 @@ function App() {
     <div>
       <RouterProvider router={router} />
       <NeonCursor />
+      <Toaster position="top-right" reverseOrder={false} />
+
     </div>
   );
 }
