@@ -14,7 +14,7 @@ export const articleSlice = createSlice({
       const article = action.payload
       state.articles.push(article)
       localStorage.setItem("articles", JSON.stringify(state.articles))
-      toast.success("Article created successfully ☑️")
+      toast.success("Article created successfully")
     },
     updateToarticles: (state, action) => {
       const article = action.payload
@@ -23,7 +23,7 @@ export const articleSlice = createSlice({
       if (index !== -1) {
         state.articles[index] = article
         localStorage.setItem("articles", JSON.stringify(state.articles))
-        toast.success("Article updated successfully ✅")
+        toast.success("Article updated successfully")
       } else {
         toast.error("Article not found ❌")
       }
