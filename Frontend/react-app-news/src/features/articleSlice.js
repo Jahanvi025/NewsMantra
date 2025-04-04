@@ -25,7 +25,7 @@ export const articleSlice = createSlice({
         localStorage.setItem("articles", JSON.stringify(state.articles))
         toast.success("Article updated successfully")
       } else {
-        toast.error("Article not found ❌")
+        toast.error("Article not found")
       }
     },
     resetAllarticles: (state) => {

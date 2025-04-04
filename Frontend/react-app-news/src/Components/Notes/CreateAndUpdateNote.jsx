@@ -159,7 +159,7 @@ const CreateAndUpdateNote = () => {
       <div className="bg-black min-h-screen">
         <div className="p-4 md:p-6 lg:p-8 h-full flex flex-col">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-            <h2 className="text-white font-[Supreme] text-xl">Watch Your Articles</h2>
+            <h2 className="text-white font-[Supreme] text-lg font-bold">Watch Your Articles</h2>
             <div className="relative w-full sm:w-auto">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-white h-4 w-4" />
               <input

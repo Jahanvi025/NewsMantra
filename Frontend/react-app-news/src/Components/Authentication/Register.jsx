@@ -1,13 +1,37 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { useForm } from "react-hook-form";
 import { Eye, EyeOff } from 'lucide-react';
-import { Link } from "react-router-dom";
-import googleicon from "../../assets/images/icons8-google.svg"
-import poster from "../../assets/images/loginimg.svg"
+import { Link, useNavigate } from "react-router-dom";
+import axios from 'axios';
+import googleicon from "../../assets/images/icons8-google.svg";
+import poster from "../../assets/images/loginimg.svg";
 import { motion } from "framer-motion";
 
 const Register = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [serverError, setServerError] = useState("");
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset
+  } = useForm();
+
+  const onSubmit = async (data) => {
+    try {
+      setServerError("");
+      const res = await axios.post("/auth/register", data);
+      if (res.data.success) {
+        reset();
+        navigate("/login");
+      }
+    } catch (error) {
+      console.error("Registration failed:", error);
+      setServerError(error.response?.data?.message || "Something went wrong");
+    }
+  };
 
   return (
     <div className='relative p-6 md:p-12'>
@@ -42,30 +66,59 @@ const Register = () => {
             <div className="border-b border-solid border-neutral-950 w-24 md:w-32"></div>
           </div>
 
-          <form action="" className='w-full'>
+          <form onSubmit={handleSubmit(onSubmit)} className='w-full'>
             <motion.div 
               className='flex flex-col -space-y-0.5'
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <input type="text" placeholder='Enter Full Name here' className='placeholder:font-[Supreme] border border-solid border-neutral-950 rounded-lg pl-5 pr-9 py-2 placeholder:text-sm placeholder:text-black placeholder:select-none w-full px-16 md:px-20'/>
+              <input 
+                type="text" 
+                placeholder='Enter Full Name here' 
+                className='placeholder:font-[Supreme] border border-solid border-neutral-950 rounded-lg pl-5 pr-9 py-2 placeholder:text-sm placeholder:text-black w-full' 
+                {...register("username", { required: "Username is required", minLength: { value: 3, message: "Minimum 3 characters" } })} 
+              />
+              {errors.username && <p className='text-[#F7374F] mt-1 text-xs'>{errors.username.message}</p>}
               <br />
-              <input type="email" placeholder='Enter Email here' className='placeholder:font-[Supreme] placeholder:select-none placeholder:text-black placeholder:text-sm border border-solid border-neutral-950 rounded-lg pl-5 pr-9 py-2 w-full px-16 md:px-20'/>
+
+              <input 
+                type="email" 
+                placeholder='Enter Email here' 
+                className='placeholder:font-[Supreme] border border-solid border-neutral-950 rounded-lg pl-5 pr-9 py-2 placeholder:text-sm placeholder:text-black w-full' 
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: { value: /^\S+@\S+$/i, message: "Invalid email format" }
+                })} 
+              />
+              {errors.email && <p className='text-[#F7374F] mt-1  text-xs'>{errors.email.message}</p>}
               <br />
+
               <div className='relative w-full'>
-                <input type={isVisible ? 'text' : 'password'} placeholder='Enter Password here' className='placeholder:font-[Supreme] placeholder:select-none placeholder:text-black placeholder:text-sm border border-solid border-neutral-950 rounded-lg pl-5 pr-10 py-2 w-full px-16 md:px-20'/>
+                <input 
+                  type={isVisible ? 'text' : 'password'} 
+                  placeholder='Enter Password here' 
+                  className='placeholder:font-[Supreme] border border-solid border-neutral-950 rounded-lg pl-5 pr-10 py-2 placeholder:text-sm placeholder:text-black w-full' 
+                  {...register("password", {
+                    required: "Password is required",
+                    minLength: { value: 8, message: "Minimum 8 characters required" }
+                  })} 
+                />
                 <div
                   className='absolute top-1/2 right-4 transform -translate-y-1/2 text-gray-500 cursor-pointer'
                   onClick={() => setIsVisible((prev) => !prev)}
                 >
                   {isVisible ? <Eye size={22} /> : <EyeOff size={22} />}
                 </div>
+                {errors.password && <p className='text-[#F7374F] mt-1  text-xs'>{errors.password.message}</p>}
               </div>
               <br />
+
+              {serverError && <p className="text-[#F7374F] mb-2  text-sm">{serverError}</p>}
               
               <motion.button 
-                className='font-[Supreme] bg-black px-14 py-2 text-sm hover:text-[#F7374F] transform transition-transform delay-150 border-neutral-950 rounded-lg border border-solid text-white group w-full'
+                type="submit"
+                className='font-[Supreme] bg-black px-14 py-2 text-sm hover:text-[#F7374F] transition-transform delay-150 border-neutral-950 rounded-lg border text-white w-full'
                 whileHover={{ scale: 1.05 }}
               >Sign Up</motion.button>
             </motion.div>
@@ -90,7 +143,7 @@ const Register = () => {
         </motion.div>
       </motion.div>
     </div>
-  )
-}
+  );
+};
 
-export default Register
+export default Register;

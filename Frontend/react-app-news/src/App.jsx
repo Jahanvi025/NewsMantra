@@ -7,7 +7,6 @@ import Navbar from "./Components/NavbarAndFooter/Navbar";
 import Footer from "./Components/NavbarAndFooter/Footer";
 import AllNews from "./Components/News/AllNews";
 import FamousNews from "./Components/FamousNews/FamousNews";
-import Notes from "./Components/Notes/Notes";
 import ViewNotes from "./Components/Notes/ViewNotes";
 import ContactUS from "./Components/ContactPage/ContactUS";
 import NotFound from "./Components/NotFound/NotFound";
@@ -17,6 +16,7 @@ import Register from "./Components/Authentication/Register";
 import NeonCursor from "./Components/StylesFolder/NeonCursor";
 import CreateAndUpdateNote from "./Components/Notes/CreateAndUpdateNote";
 import CurrentNewsPage from "./Components/CurrentAffairs/CurrentNewsPage";
+import Profile from "./Components/Profile/Profile";
 
 function App() {
 
@@ -104,11 +104,11 @@ function App() {
         </div>
     },
     {
-      path: '/contactus',
+      path: '/profile',
       element:
         <div>
           <Navbar />
-          <ContactUS />
+          <Profile />
         </div>
     },
     {

@@ -86,11 +86,8 @@ const Footer = () => {
       </div>
 
       <div className="w-full rounded-b-lg bg-[#F7374F] py-4 text-center mt-[2px]">
-        <p className="text-white font-[Supreme] text-sm md:text-base">© 2024 NewsMantra. All Rights Reserved.</p>
-        <div className="flex justify-center space-x-4 mt-2">
-          <Link to="/terms" className="text-sm md:text-base text-white font-[Supreme] font-bold hover:underline">Terms of Service</Link>
-          <Link to="/privacy" className="text-sm md:text-base text-white font-[Supreme] font-bold hover:underline">Privacy Policy</Link>
-        </div>
+        <p className="text-white font-[Supreme] text-sm md:text-base">© {new Date().getFullYear()} NewsMantra. All Rights Reserved.
+        </p>
       </div>
     </footer>
   );

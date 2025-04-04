@@ -8,7 +8,7 @@ dotenv.config();
 const register = async (req, res) => {
     try {
         const { username, email, password } = req.body;
-
+      
         // Check if the user already exists
         const existingUser = await UserModel.findOne({ email });
         if (existingUser) {
@@ -20,6 +20,7 @@ const register = async (req, res) => {
         const userModel = new UserModel({ username, email, password: hashedPassword });
 
         const data = await userModel.save();
+
         res.status(201).json({ message: "User created successfully", success: true , data : data});
     } catch (error) {
         console.error("Error in registration:", error); // Log error
@@ -30,6 +31,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
     try {
         const {email, password } = req.body;
+        //console.log("🚀 login route hit with body:", req.body);
 
         // Check user exists
         const existingUser = await UserModel.findOne({ email });
