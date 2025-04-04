@@ -1,30 +1,48 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit"
+import toast from "react-hot-toast"
 
 const initialState = {
-  value: 0,
+  articles: localStorage.getItem("articles") ? JSON.parse(localStorage.getItem("articles")) : [],
 }
 
+
 export const articleSlice = createSlice({
-  name: 'article',
+  name: "article",
   initialState,
   reducers: {
-    increment: (state) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      state.value += 1
+    addToarticles: (state, action) => {
+      const article = action.payload
+      state.articles.push(article)
+      localStorage.setItem("articles", JSON.stringify(state.articles))
+      toast.success("Article created successfully ☑️")
     },
-    decrement: (state) => {
-      state.value -= 1
+    updateToarticles: (state, action) => {
+      const article = action.payload
+      const index = state.articles.findIndex((item) => item._id === article._id)
+
+      if (index !== -1) {
+        state.articles[index] = article
+        localStorage.setItem("articles", JSON.stringify(state.articles))
+        toast.success("Article updated successfully ✅")
+      } else {
+        toast.error("Article not found ❌")
+      }
     },
-    incrementByAmount: (state, action) => {
-      state.value += action.payload
+    resetAllarticles: (state) => {
+      state.articles = []
+      localStorage.removeItem("articles")
+      toast.success("All articles cleared")
+    },
+    removeFromarticles: (state, action) => {
+      const articleId = action.payload
+      state.articles = state.articles.filter((item) => item._id !== articleId)
+      localStorage.setItem("articles", JSON.stringify(state.articles))
+      toast.success("Article deleted successfully")
     },
   },
 })
 
-// Action creators are generated for each case reducer function
-export const { increment, decrement, incrementByAmount } = articleSlice.actions
+export const { addToarticles, updateToarticles, resetAllarticles, removeFromarticles } = articleSlice.actions
 
 export default articleSlice.reducer
+

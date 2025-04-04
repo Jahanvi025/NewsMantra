@@ -63,12 +63,11 @@ function App() {
         <div>
           <Navbar />
           <CreateAndUpdateNote />
-          <Notes />
           <Footer />
         </div>
     },
     {
-      path: '/view-article/:id',
+      path: '/articles/:id',
       element:
         <div>
           <Navbar />
