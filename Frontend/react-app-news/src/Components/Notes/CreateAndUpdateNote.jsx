@@ -1,35 +1,57 @@
-import { useState, useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { addToarticles, removeFromarticles, updateToarticles } from "../../features/articleSlice"
-import { Link, useSearchParams } from "react-router-dom"
-import toast from "react-hot-toast"
-import { Search, Edit, Trash2, Copy, Share, Eye, Clock, Calendar } from "lucide-react"
-import { format } from "date-fns"
+import React, { useState, useEffect } from "react";
+import { useSearchParams, Link } from "react-router-dom";
+import axios from "axios";
+import toast from "react-hot-toast";
+import {
+  Search,
+  Edit,
+  Trash2,
+  Copy,
+  Share,
+  Eye,
+  Clock,
+  Calendar,
+} from "lucide-react";
+import { format } from "date-fns";
 
 const CreateAndUpdateNote = () => {
   const [title, setTitle] = useState("");
   const [value, setValue] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
   const [editingId, setEditingId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [articles, setArticles] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const articles = useSelector((state) => state.article.articles);
-  const dispatch = useDispatch();
+  const capitalizeTitle = (input) =>
+    input.replace(/\b\w/g, (char) => char.toUpperCase());
 
-  // Capitalize each word in title
-  const capitalizeTitle = (input) => {
-    return input.replace(/\b\w/g, (char) => char.toUpperCase());
+  const fetchArticles = async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem("user"));
+      const config = user?.token
+        ? { headers: { Authorization: `Bearer ${user.token}` } }
+        : {};
+
+      const res = await axios.get("/article/all", config);
+      setArticles(res.data.articles || []);
+    } catch (err) {
+      console.error("Error fetching articles", err);
+      toast.error("Failed to load articles");
+    }
   };
 
-  // Auto fill title and content if editing from URL
+  useEffect(() => {
+    fetchArticles();
+  }, []);
+
   useEffect(() => {
     const articleId = searchParams.get("articleId");
-    if (articleId) {
+    if (articleId && articles.length > 0) {
       const articleToEdit = articles.find((a) => a._id === articleId);
       if (articleToEdit) {
         setEditingId(articleId);
         setTitle(articleToEdit.title);
-        setValue(articleToEdit.content);
+        setValue(articleToEdit.description || articleToEdit.content);
       }
     }
   }, [searchParams, articles]);
@@ -38,7 +60,7 @@ const CreateAndUpdateNote = () => {
     article.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleSaveArticle = () => {
+  const handleSaveArticle = async () => {
     if (!title.trim() || !value.trim()) {
       toast.error("Title and content are required");
       return;
@@ -47,40 +69,83 @@ const CreateAndUpdateNote = () => {
     const formattedTitle = capitalizeTitle(title.trim());
     const formattedContent =
       value.charAt(0).toUpperCase() + value.slice(1).trim();
+    const user = JSON.parse(localStorage.getItem("user"));
 
-    const article = {
-      _id: editingId || Date.now().toString(36),
-      title: formattedTitle,
-      content: formattedContent,
-      createdAT: editingId
-        ? articles.find((a) => a._id === editingId)?.createdAT
-        : new Date().toISOString(),
+    if (!user?.token) {
+      console.log("Token being sent:", user?.token);
+
+      toast.error("Login required to create or update articles");
+      return;
+    }
+    
+    const config = {
+      headers: { Authorization: `Bearer ${user.token}` },
     };
 
-    if (editingId) {
-      dispatch(updateToarticles(article));
-    } else {
-      dispatch(addToarticles(article));
-    }
-
-    // Reset
-    setTitle("");
-    setValue("");
-    setEditingId(null);
-    setSearchParams({});
-  };
-
-  const handleDelete = (id) => {
-    if (window.confirm("Are you sure you want to delete this article?")) {
-      dispatch(removeFromarticles(id));
-    }
-  };
-
-  const formatDate = (dateString) => {
     try {
-      return format(new Date(dateString), "MMMM dd, yyyy");
+      if (editingId) {
+        // UPDATE
+        await axios.put(
+          `/article/update/${editingId}`,
+          {
+            title: formattedTitle,
+            description: formattedContent,
+          },
+          config
+        );
+        toast.success("Article updated!");
+      } else {
+        // CREATE
+        await axios.post(
+          "/article/create",
+          {
+            title: formattedTitle,
+            description: formattedContent,
+          },
+          config
+        );
+        toast.success("Article created!");
+      }
+
+      // Reset form
+      setEditingId(null);
+      setTitle("");
+      setValue("");
+      setSearchParams({});
+      fetchArticles();
+    } catch (error) {
+      console.error("Error saving article", error);
+      toast.error("Failed to save article");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    const confirm = window.confirm("Are you sure you want to delete this article?");
+    if (!confirm) return;
+
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user?.token) {
+      toast.error("Login required to delete article");
+      return;
+    }
+
+    try {
+      await axios.delete(`/article/delete/${id}`, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
+      toast.success("Article deleted!");
+      setArticles((prev) => prev.filter((a) => a._id !== id));
+    } catch (err) {
+      console.error("Delete error", err);
+      toast.error("Failed to delete article");
+    }
+  };
+
+  const formatDate = (date) => {
+    try {
+      return format(new Date(date), "MMMM dd, yyyy");
     } catch {
-      return dateString;
+      return date;
     }
   };
 
@@ -91,7 +156,7 @@ const CreateAndUpdateNote = () => {
 
   return (
     <div className="relative w-full min-h-screen grid grid-cols-1 lg:grid-cols-2 gap-0">
-      {/* Left - Form */}
+      {/* Form */}
       <div className="p-4 md:p-8 lg:p-12">
         <div className="mb-6">
           <h1 className="text-4xl font-extrabold text-gray-900 font-[Supreme]">
@@ -113,7 +178,7 @@ const CreateAndUpdateNote = () => {
                 value={title}
                 placeholder="Enter your title here"
                 className="border font-[Supreme] border-neutral-500 rounded-lg p-3 w-full"
-                onChange={(e) => setTitle(capitalizeTitle(e.target.value))}
+                onChange={(e) => setTitle(e.target.value)}
               />
               <button
                 onClick={handleSaveArticle}
@@ -155,7 +220,7 @@ const CreateAndUpdateNote = () => {
         </div>
       </div>
 
-      {/* Right - Article Display */}
+      {/* Articles List */}
       <div className="bg-black min-h-screen">
         <div className="p-4 md:p-6 lg:p-8 h-full flex flex-col">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
@@ -184,17 +249,17 @@ const CreateAndUpdateNote = () => {
                     <div className="p-4">
                       <h3 className="font-semibold font-[Supreme] text-white text-lg mb-2">{article.title}</h3>
                       <p className="text-sm font-[Supreme] text-neutral-100 line-clamp-3">
-                        {article.content.split(" ").slice(0, 20).join(" ")}{article.content.split(" ").length > 20 ? "..." : ""}
+                        {(article.description || article.content)?.split(" ").slice(0, 20).join(" ")}...
                       </p>
 
                       <div className="flex font-[Supreme] justify-between items-center mt-4 text-xs text-gray-400">
                         <div className="flex items-center">
                           <Calendar className="w-3 h-3 mr-1" />
-                          <span>{formatDate(article.createdAT)}</span>
+                          <span>{formatDate(article.createdAt)}</span>
                         </div>
                         <div className="flex items-center">
                           <Clock className="w-3 h-3 mr-1" />
-                          <span>{calculateReadTime(article.content)}</span>
+                          <span>{calculateReadTime(article.description || article.content)}</span>
                         </div>
                       </div>
                     </div>
@@ -204,7 +269,7 @@ const CreateAndUpdateNote = () => {
                         onClick={() => {
                           setEditingId(article._id);
                           setTitle(article.title);
-                          setValue(article.content);
+                          setValue(article.description || article.content);
                         }}
                         className="flex items-center gap-1 px-2 py-1 rounded-lg bg-black border border-white text-white hover:bg-neutral-300 hover:text-red-600 text-xs font-[Supreme]"
                       >
@@ -230,7 +295,7 @@ const CreateAndUpdateNote = () => {
 
                       <button
                         onClick={() => {
-                          navigator.clipboard.writeText(article.content);
+                          navigator.clipboard.writeText(article.description || article.content);
                           toast.success("Copied to clipboard");
                         }}
                         className="flex items-center gap-1 px-2 py-1 rounded-lg bg-black border border-white text-white hover:bg-neutral-300 hover:text-red-600 text-xs font-[Supreme]"
@@ -243,7 +308,7 @@ const CreateAndUpdateNote = () => {
                         onClick={() => {
                           const link = `${window.location.origin}/articles/${article._id}`;
                           navigator.clipboard.writeText(link);
-                          toast.success("Shareable link copied to clipboard!");
+                          toast.success("Shareable link copied!");
                         }}
                         className="flex items-center gap-1 px-2 py-1 rounded-lg bg-black border border-white text-white hover:bg-neutral-300 hover:text-red-600 text-xs font-[Supreme]"
                       >

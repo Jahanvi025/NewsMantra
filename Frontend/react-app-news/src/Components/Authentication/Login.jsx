@@ -22,17 +22,23 @@ const Login = () => {
     try {
       setServerError("");
       const res = await axios.post("/auth/login", data);
+     // console.log("Login response:", res.data);
+  
       if (res.data.success) {
+        const { token, email, username } = res.data;
 
-        localStorage.setItem("user", JSON.stringify({ username, email }));
+  
+        // Store user and token in localStorage
+        localStorage.setItem("user", JSON.stringify({ token, username, email }));
         navigate("/");
       }
-
+  
     } catch (error) {
       console.error("Login failed:", error);
       setServerError(error.response?.data?.message || "Something went wrong");
     }
   };
+  
 
   return (
     <div className='relative p-6 md:p-6'>

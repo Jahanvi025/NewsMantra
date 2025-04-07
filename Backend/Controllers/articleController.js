@@ -44,6 +44,23 @@ const createArticle = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error", success: false });
     }
 };
+// Get Single Article by ID (Public access)
+const getSingleArticle = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const article = await Article.findById(id);
+  
+      if (!article) {
+        return res.status(404).json({ message: "Article not found", success: false });
+      }
+  
+      res.status(200).json({ message: "Article fetched successfully", success: true, article });
+    } catch (error) {
+      console.error("Error fetching article:", error);
+      res.status(500).json({ message: "Internal Server Error", success: false });
+    }
+  };
+  
 
 //  Update Article (Only Author Can Update)
 const updateArticle = async (req, res) => {
@@ -102,4 +119,4 @@ const deleteArticle = async (req, res) => {
     }
 };
 
-export { getArticles, createArticle, updateArticle, deleteArticle };
+export { getArticles, createArticle, getSingleArticle, updateArticle, deleteArticle };

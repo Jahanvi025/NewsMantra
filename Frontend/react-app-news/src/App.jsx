@@ -7,16 +7,16 @@ import Navbar from "./Components/NavbarAndFooter/Navbar";
 import Footer from "./Components/NavbarAndFooter/Footer";
 import AllNews from "./Components/News/AllNews";
 import FamousNews from "./Components/FamousNews/FamousNews";
-import ViewNotes from "./Components/Notes/ViewNotes";
 import ContactUS from "./Components/ContactPage/ContactUS";
 import NotFound from "./Components/NotFound/NotFound";
 import About from "./Components/About/About";
 import Login from "./Components/Authentication/Login";
 import Register from "./Components/Authentication/Register";
 import NeonCursor from "./Components/StylesFolder/NeonCursor";
-import CreateAndUpdateNote from "./Components/Notes/CreateAndUpdateNote";
 import CurrentNewsPage from "./Components/CurrentAffairs/CurrentNewsPage";
 import Profile from "./Components/Profile/Profile";
+import ViewNotes from "./Components/Notes/ViewNotes";
+import CreateAndUpdateNote from "./Components/Notes/CreateAndUpdateNote";
 
 function App() {
 
@@ -63,7 +63,7 @@ function App() {
       element:
         <div>
           <Navbar />
-          <CreateAndUpdateNote />
+        <CreateAndUpdateNote />
           <Footer />
         </div>
     },
@@ -72,7 +72,7 @@ function App() {
       element:
         <div>
           <Navbar />
-          <ViewNotes />
+          <ViewNotes/>
           <Footer />
         </div>
     },
