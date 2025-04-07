@@ -67,5 +67,25 @@ const fetchFamousHeadlines = async (req, res) => {
     res.status(500).json({ message: "Error fetching famous headlines" });
   }
 };
+const fetchNewsByCategory = async (req, res) => {
+  const { category } = req.query;
+  const now = Date.now();
 
-export { fetchCurrentAffairs, fetchFamousHeadlines };
+  try {
+    const response = await axios.get(
+      `https://newsapi.org/v2/top-headlines?country=us&category=${category}&pageSize=30&apiKey=${process.env.NEWS_API_KEY}`
+    );
+
+    if (!response.data.articles || response.data.articles.length === 0) {
+      return res.status(404).json({ message: "No news found for this category." });
+    }
+
+    res.json(response.data);
+  } catch (error) {
+    console.error("Error fetching news by category:", error.message);
+    res.status(500).json({ message: "Error fetching news by category." });
+  }
+};
+
+
+export { fetchCurrentAffairs, fetchFamousHeadlines, fetchNewsByCategory };

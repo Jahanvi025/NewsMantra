@@ -72,19 +72,16 @@ const CreateAndUpdateNote = () => {
     const user = JSON.parse(localStorage.getItem("user"));
 
     if (!user?.token) {
-      console.log("Token being sent:", user?.token);
-
       toast.error("Login required to create or update articles");
       return;
     }
-    
-    const config = {
-      headers: { Authorization: `Bearer ${user.token}` },
-    };
+
+    const config = user?.token
+        ? { headers: { Authorization: `Bearer ${user.token}` } }
+        : {};
 
     try {
       if (editingId) {
-        // UPDATE
         await axios.put(
           `/article/update/${editingId}`,
           {
@@ -95,7 +92,6 @@ const CreateAndUpdateNote = () => {
         );
         toast.success("Article updated!");
       } else {
-        // CREATE
         await axios.post(
           "/article/create",
           {
@@ -107,7 +103,6 @@ const CreateAndUpdateNote = () => {
         toast.success("Article created!");
       }
 
-      // Reset form
       setEditingId(null);
       setTitle("");
       setValue("");
@@ -128,11 +123,12 @@ const CreateAndUpdateNote = () => {
       toast.error("Login required to delete article");
       return;
     }
+    const config = user?.token
+        ? { headers: { Authorization: `Bearer ${user.token}` } }
+        : {};
 
     try {
-      await axios.delete(`/article/delete/${id}`, {
-        headers: { Authorization: `Bearer ${user.token}` },
-      });
+      await axios.delete(`/article/delete/${id}`,config);
       toast.success("Article deleted!");
       setArticles((prev) => prev.filter((a) => a._id !== id));
     } catch (err) {
@@ -156,7 +152,6 @@ const CreateAndUpdateNote = () => {
 
   return (
     <div className="relative w-full min-h-screen grid grid-cols-1 lg:grid-cols-2 gap-0">
-      {/* Form */}
       <div className="p-4 md:p-8 lg:p-12">
         <div className="mb-6">
           <h1 className="text-4xl font-extrabold text-gray-900 font-[Supreme]">
@@ -220,7 +215,6 @@ const CreateAndUpdateNote = () => {
         </div>
       </div>
 
-      {/* Articles List */}
       <div className="bg-black min-h-screen">
         <div className="p-4 md:p-6 lg:p-8 h-full flex flex-col">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">

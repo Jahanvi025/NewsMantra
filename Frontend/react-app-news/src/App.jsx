@@ -17,6 +17,7 @@ import CurrentNewsPage from "./Components/CurrentAffairs/CurrentNewsPage";
 import Profile from "./Components/Profile/Profile";
 import ViewNotes from "./Components/Notes/ViewNotes";
 import CreateAndUpdateNote from "./Components/Notes/CreateAndUpdateNote";
+import NewsArticlePage from "./Components/News/NewsArticlePage";
 
 function App() {
 
@@ -46,6 +47,15 @@ function App() {
         <div>
           <Navbar />
           <CurrentNewsPage/>
+          <Footer />
+        </div>
+    },
+    {
+      path: '/news/:category/:id',
+      element:
+        <div>
+          <Navbar />
+          <NewsArticlePage />
           <Footer />
         </div>
     },

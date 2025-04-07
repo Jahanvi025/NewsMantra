@@ -1,12 +1,23 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
-import { Newspaper, Loader2 } from "lucide-react"
+import {  Loader2 } from "lucide-react"
+import { formatDistanceToNow, parseISO } from "date-fns";
+import { useNavigate } from "react-router-dom";
 
 const AllNews = () => {
   const [category, setCategory] = useState("general")
   const [news, setNews] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+
+  const navigate = useNavigate();
+
+  const isBreakingNews = (publishedAt) => {
+    if (!publishedAt) return false;
+    const publishedDate = parseISO(publishedAt);
+    return new Date() - publishedDate <= 5 * 24 * 60 * 60 * 1000;
+  };
+
 
   const categories = [
     { id: "general", name: "General" },
@@ -24,8 +35,7 @@ const AllNews = () => {
     setError(null)
 
     try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"}/api/news-by-category?category=${selectedCategory}`
+      const response = await axios.get(`/api/news-by-category?category=${selectedCategory}`
       )
 
       if (response.data.articles && response.data.articles.length > 0) {
@@ -60,11 +70,10 @@ const AllNews = () => {
           <button
             key={cat.id}
             onClick={() => handleCategoryChange(cat.id)}
-            className={`px-4 py-2 rounded-md transition-colors ${
-              category === cat.id
-                ? "bg-black text-white font-[Supreme]"
-                : "bg-gray-200 hover:bg-gray-300 text-black font-[Supreme]"
-            }`}
+            className={`px-4 py-2 rounded-md transition-colors ${category === cat.id
+              ? "bg-black text-white font-[Supreme]"
+              : "bg-gray-200 hover:bg-gray-300 text-black font-[Supreme]"
+              }`}
           >
             {cat.name}
           </button>
@@ -82,55 +91,48 @@ const AllNews = () => {
             <p className="text-red-500">{error}</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {news.map((article, index) => (
               <div
                 key={index}
-                className="border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
+                className="bg-white overflow-hidden rounded-lg border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 hover:scale-[1.02] transition-all duration-200 cursor-pointer"
+                onClick={() => navigate(`/news/${category}/${index}`)}
+
               >
-                <div className="h-48 overflow-hidden bg-gray-200">
-                  {article.urlToImage ? (
-                    <img
-                      src={article.urlToImage || "/placeholder.svg"}
-                      alt={article.title}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        e.target.src = "/placeholder.svg?height=200&width=400"
-                      }}
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gray-200">
-                      <Newspaper className="w-12 h-12 text-gray-400" />
+                <div className="relative aspect-video group">
+                  <img
+                    src={article.urlToImage || `/placeholder.svg?height=200&width=400`}
+                    alt={article.title}
+                    className="object-cover w-full h-full transition-all group-hover:brightness-75"
+                  />
+                  {isBreakingNews(article.publishedAt) && (
+                    <div className="absolute top-3 right-3">
+                      <span className="bg-red-500 text-white text-xs font-medium px-3 py-1 rounded-full">Breaking</span>
                     </div>
                   )}
                 </div>
                 <div className="p-4">
-                  <div className="flex justify-between items-start mb-2">
-                    <span className="text-xs font-medium bg-gray-100 px-2 py-1 rounded">
-                      {article.source.name || "Unknown Source"}
-                    </span>
-                    <span className="text-xs text-gray-500">
-                      {new Date(article.publishedAt).toLocaleDateString()}
+                  <div className="mb-2">
+                    <span className="text-sm font-medium text-gray-700 font-[Supreme] border border-solid border-neutral-200 px-2 py-1 rounded">
+                      {article.source?.name || "Unknown"}
                     </span>
                   </div>
-                  <h2 className="text-lg font-semibold mb-2 line-clamp-2">
-                    {article.title}
-                  </h2>
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-                    {article.description}
+                  <h3 className="text-lg font-[Supreme] font-semibold line-clamp-2 mb-2">
+                    {article.title?.length > 50 ? article.title.substring(0, 50) + "..." : article.title}
+                  </h3>
+                  <p className="text-sm font-[Supreme] text-gray-600 mt-2 mb-2 line-clamp-3">
+                    {article.description || "No description available"}
                   </p>
-                  <a
-                    href={article.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm font-medium text-black hover:underline inline-block"
-                  >
-                    Read full article
-                  </a>
+                  <div className="flex justify-between items-center mt-4 text-xs text-gray-500 font-[Supreme]">
+                    <span>{article.source?.name || "Unknown Source"}</span>
+                    <span>{formatDistanceToNow(new Date(article.publishedAt))} ago</span>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
+
+
         )}
       </div>
     </div>
