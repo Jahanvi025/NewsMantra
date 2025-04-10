@@ -65,20 +65,22 @@ const AllNews = () => {
     <div className="container mx-auto py-8">
 
       {/* Category buttons */}
-      <div className="flex flex-wra justify-center gap-2 mb-8">
-        {categories.map((cat) => (
-          <button
-            key={cat.id}
-            onClick={() => handleCategoryChange(cat.id)}
-            className={`px-4 py-2 rounded-md transition-colors ${category === cat.id
-              ? "bg-black text-white font-[Supreme]"
-              : "bg-gray-200 hover:bg-gray-300 text-black font-[Supreme]"
-              }`}
-          >
-            {cat.name}
-          </button>
-        ))}
-      </div>
+<div className="flex flex-wrap justify-center gap-2 px-4 sm:px-8 mb-8">
+  {categories.map((cat) => (
+    <button
+      key={cat.id}
+      onClick={() => handleCategoryChange(cat.id)}
+      className={`px-4 py-2 text-sm sm:text-base rounded-md transition-colors ${
+        category === cat.id
+          ? "bg-black text-white font-[Supreme]"
+          : "bg-gray-200 hover:bg-gray-300 text-black font-[Supreme]"
+      }`}
+    >
+      {cat.name}
+    </button>
+  ))}
+</div>
+
 
       {/* News content */}
       <div className="mt-6">
@@ -91,7 +93,7 @@ const AllNews = () => {
             <p className="text-red-500">{error}</p>
           </div>
         ) : (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 px-2 md:px-12">
             {news.map((article, index) => (
               <div
                 key={index}

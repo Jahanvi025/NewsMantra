@@ -7,59 +7,51 @@ import { motion } from "framer-motion";
 const HomePage = () => {
   const navigate = useNavigate();
 
-  function handleClick() {
+  const handleClick = () => {
     navigate("/news");
-  }
+  };
 
   return (
-    <div className='relative'>
-      <div className=' flex flex-col md:flex-row justify-end items-start gap-6 md:gap-0'>
-
-        {/* Left Section */}
-        <motion.div 
-          className="flex absolute top-15 left-12 flex-col mt-15 gap-3 text-center md:text-left"
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
+    <div
+      className="relative w-full bg-cover bg-center"
+      style={{
+        backgroundImage: `url(${newsimg})`,
+        minHeight: "50vh", // short height even for small screens
+      }}
+    >
+     
+      {/* Text Content */}
+      <div className="relative z-10 px-4 md:px-16 py-8 flex flex-col items-center md:items-start justify-center gap-6 h-full">
+        <motion.h1
+          className="text-4xl sm:text-6xl md:text-7xl font-[Supreme] font-bold bg-gradient-to-b from-black to-neutral-700 bg-clip-text text-transparent text-center md:text-left"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <h1 className='text-6xl sm:text-8xl md:text-9xl font-[Supreme] font-bold bg-gradient-to-b from-black to-neutral-600 bg-clip-text text-transparent'>
-            Prime News
-          </h1>
-          <motion.div 
-            className='flex flex-row gap-2 justify-center md:justify-start items-start pl-2'
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.8 }}
-          >
-            <Newspaper size={22} color="#F7374F" strokeWidth={1.5} />
-            <p className='text-neutral-800 font-[Supreme] w-full md:w-2/6'>
-              Stay informed with the latest headlines from around the world. NewsMantra brings you
-              <span className='text-[#F7374F]'> real-time updates </span>
-              on politics, technology, business, sports, entertainment, and more—all in one place.
-            </p>
-          </motion.div>
-          <motion.div
-            
-            whileTap={{ scale: 0.95 }}
-          >
-            <button 
-              className="bg-[#F7374F] hover:text-white font-[Supreme] py-2 px-4 rounded-lg mt-1 transition-all delay-100 ease-in group"
-              onClick={handleClick}
-            >
-              Read News
-            </button>
-          </motion.div>
+          Prime News
+        </motion.h1>
+
+        <motion.div
+          className="flex gap-2 items-start max-w-xl text-center md:text-left"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.8 }}
+        >
+          <Newspaper size={32} color="#F7374F" strokeWidth={1.5} />
+          <p className="text-gray-800 font-[Supreme] text-sm sm:text-base">
+            Stay informed with the latest headlines from around the world. NewsMantra brings you
+            <span className="text-[#F7374F] font-medium"> real-time updates </span>
+            on politics, tech, business, sports, and more—all in one place.
+          </p>
         </motion.div>
 
-        {/* Right Section */}
-        <motion.div 
-          className="flex flex-col gap-3 text-center items-end md:text-left w-5/6 h-[90vh]"
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 1 }}
+        <motion.button
+          whileTap={{ scale: 0.95 }}
+          onClick={handleClick}
+          className="bg-[#F7374F] text-white hover:bg-black px-6 py-2 rounded-lg font-[Supreme] transition-colors duration-300"
         >
-          <img src={newsimg} alt="newsimg" loading='lazy' className='object-cover'/>
-        </motion.div>
+          Read News
+        </motion.button>
       </div>
     </div>
   );

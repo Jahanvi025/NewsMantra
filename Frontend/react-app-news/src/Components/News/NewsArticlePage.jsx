@@ -80,7 +80,7 @@ export default function NewsArticlePage() {
   const publishedTime = article.publishedAt ? format(new Date(article.publishedAt), "h:mm a") : ""
 
   return (
-    <div className="bg-white min-h-screen mb-10">
+    <div className="bg-white min-h-screen mb-10 px-2 sm:px-2 md:px-6 lg:px-12">
       <div className="container mx-auto px-4 py-6">
         <button
           onClick={() => navigate(`/news`)}
@@ -102,15 +102,15 @@ export default function NewsArticlePage() {
             </span>
           )}
         </div>
-        <h1 className="text-3xl font-bold font-[Supreme] mb-4">{article.title}</h1>
+        <h1 className="text-xl md:text-3xl font-bold font-[Supreme] mb-4">{article.title}</h1>
         <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mb-6">
-          <div className="flex items-center">
-            <Calendar className="w-4 h-4 mr-1" />
+          <div className="flex items-center font-[Supreme]">
+            <Calendar className="w-4 h-4 mr-1 font-[Supreme]" />
             {publishedDate}
           </div>
           {publishedTime && (
-            <div className="flex items-center">
-              <Clock className="w-4 h-4 mr-1" />
+            <div className="flex items-center font-[Supreme]">
+              <Clock className="w-4 h-4 mr-1 font-[Supreme]" />
               {publishedTime}
             </div>
           )}
@@ -148,14 +148,16 @@ export default function NewsArticlePage() {
                   <Printer className="w-5 h-5" />
                 </button>
               </div>
-              <div className="flex items-center text-gray-500 text-sm">
+              <div className="flex items-center text-gray-500 text-sm font-[Supreme]">
                 <Eye className="w-4 h-4 mr-1" />
                 {Math.floor(Math.random() * 1000) + 100} views
               </div>
             </div>
 
             <div className="prose max-w-none font-[Supreme]">
-              <p className="text-lg font-semibold text-gray-700 mb-4">{article.description}</p>
+              <p className=" md:text-base lg:text-lg font-semibold text-gray-700 mb-3 sm:mb-4">
+                {article.description}
+              </p>
               <p>{article.content || `${article.description} More insights and details to follow.`}</p>
               <p className="mt-4">Stay tuned for further developments on this topic.</p>
 

@@ -88,4 +88,57 @@ const fetchNewsByCategory = async (req, res) => {
 };
 
 
-export { fetchCurrentAffairs, fetchFamousHeadlines, fetchNewsByCategory };
+// Optional: Cache (if needed)
+let cachedNewsBySource = {};
+let lastFetchTimeBySource = {};
+
+// Mapping readable names to NewsAPI source IDs
+const sourceMap = {
+  "Times of India": "times-of-india",
+  "The Hindu": "the-hindu",
+  "Indian Express": "indian-express",
+  "Hindustan Times": "hindustan-times",
+  "Economic Times": "economic-times",
+}
+
+
+const fetchNewsBySource = async (req, res) => {
+  const { source } = req.query;
+
+  if (!source || !sourceMap[source]) {
+    return res.status(400).json({ message: "Invalid or missing newspaper source." });
+  }
+
+  const sourceId = sourceMap[source];
+  const now = Date.now();
+
+  // Serve from cache if available and recent
+  if (
+    cachedNewsBySource[sourceId] &&
+    now - (lastFetchTimeBySource[sourceId] || 0) < CACHE_DURATION
+  ) {
+    return res.json(cachedNewsBySource[sourceId]);
+  }
+
+  try {
+    const response = await axios.get(
+      `https://gnews.io/api/v4/search?q="${source}"&lang=en&max=18&apikey=${process.env.GNEWS_API_KEY}`
+    )    
+
+    if (!response.data.articles || response.data.articles.length === 0) {
+      return res.status(404).json({ message: `No news found for ${source}.` });
+    }
+
+    // Update cache
+    cachedNewsBySource[sourceId] = response.data;
+    lastFetchTimeBySource[sourceId] = now;
+
+    res.json(response.data);
+  } catch (error) {
+    console.error(`Error fetching news from ${source}:`, error.message);
+    res.status(500).json({ message: "Error fetching news from source." });
+  }
+};
+
+
+export { fetchCurrentAffairs, fetchFamousHeadlines, fetchNewsByCategory, fetchNewsBySource };

@@ -92,7 +92,7 @@ const Navbar = () => {
 
   const AuthButton = ({ variant, onClick, children }) => (
     <button
-      className={`font-[Supreme] text-[15px] font-normal ${variant === "primary"
+      className={`font-[Supreme] text-[15px] font-normal  ${variant === "primary"
           ? "text-white bg-black border border-neutral-200 transition-colors hover:text-[#F7374F]"
           : "text-black border border-neutral-200 transition-colors hover:bg-neutral-100"
         } px-4 py-2 rounded-sm`}
@@ -151,7 +151,7 @@ const Navbar = () => {
             >
               <span>All News</span>
               <div className="relative w-3 h-3 ml-1 mt-0.5">
-                <ChevronDown className="absolute top-0 left-0 w-3 h-3 transition-transform duration-300 group-hover:rotate-180" />
+                <ChevronDown className="absolute top-0 left-0 w-3 h-3 transition-transform duration-700 group-hover:rotate-180" />
               </div>
             </NavLink>
 
@@ -214,7 +214,7 @@ const Navbar = () => {
               )}
             </div>
           ) : (
-            <>
+            <div className="hidden md:flex md:gap-2 ">
               <AuthButton variant="outline" onClick={() => navigate("/login")}>
                 Login
               </AuthButton>
@@ -224,7 +224,7 @@ const Navbar = () => {
               >
                 Sign Up
               </AuthButton>
-            </>
+            </div>
           )}
         </div>
       </div>

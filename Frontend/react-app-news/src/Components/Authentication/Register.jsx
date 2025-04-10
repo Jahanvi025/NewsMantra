@@ -6,6 +6,7 @@ import axios from 'axios';
 import googleicon from "../../assets/images/icons8-google.svg";
 import poster from "../../assets/images/loginimg.svg";
 import { motion } from "framer-motion";
+import toast from 'react-hot-toast';
 
 const Register = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -24,6 +25,7 @@ const Register = () => {
       setServerError("");
       const res = await axios.post("/auth/register", data);
       if (res.data.success) {
+        toast.success("Signup successful! You can now log in.");
         reset();
         navigate("/login");
       }

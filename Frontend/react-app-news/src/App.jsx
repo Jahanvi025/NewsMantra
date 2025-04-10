@@ -18,6 +18,8 @@ import Profile from "./Components/Profile/Profile";
 import ViewNotes from "./Components/Notes/ViewNotes";
 import CreateAndUpdateNote from "./Components/Notes/CreateAndUpdateNote";
 import NewsArticlePage from "./Components/News/NewsArticlePage";
+import DifferentNewsPapers from "./Components/News/DifferentNewsPapers";
+import DifferentNewspaperArticlePage from "./Components/News/DifferentNewspaperArticlePage";
 
 function App() {
 
@@ -42,6 +44,51 @@ function App() {
         </div>
     },
     {
+      path: '/news/times-of-india',
+      element:
+        <div>
+          <Navbar />
+          <DifferentNewsPapers/>
+          <Footer />
+        </div>
+    },
+    {
+      path: '/news/indian-express',
+      element:
+        <div>
+          <Navbar />
+          <DifferentNewsPapers/>
+          <Footer />
+        </div>
+    },
+    {
+      path: '/news/economic-times',
+      element:
+        <div>
+          <Navbar />
+          <DifferentNewsPapers/>
+          <Footer />
+        </div>
+    },
+    {
+      path: '/news/the-hindu',
+      element:
+        <div>
+          <Navbar />
+          <DifferentNewsPapers/>
+          <Footer />
+        </div>
+    },
+    {
+      path: '/news/hindustan-times',
+      element:
+        <div>
+          <Navbar />
+          <DifferentNewsPapers/>
+          <Footer />
+        </div>
+    },
+    {
       path: '/news/currentnews/:id',
       element:
         <div>
@@ -56,6 +103,15 @@ function App() {
         <div>
           <Navbar />
           <NewsArticlePage />
+          <Footer />
+        </div>
+    },
+    {
+      path: '/news/:newspaperName',
+      element:
+        <div>
+          <Navbar />
+         <DifferentNewspaperArticlePage/>
           <Footer />
         </div>
     },

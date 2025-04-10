@@ -88,7 +88,7 @@ const FamousNews = () => {
 
         // Fetch famous headlines
         const headlinesResponse = await axios.get("/api/famous-headlines")
-        const headlinesArticles = headlinesResponse.data.articles || []
+        const headlinesArticles = headlinesResponse.data.articles.reverse() || []
 
         if (headlinesArticles.length > 0) {
           // Set the first article as featured
@@ -148,7 +148,7 @@ const FamousNews = () => {
   }
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-white min-h-screen px-2 md:px-12">
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Featured Article - Left Side */}
@@ -159,11 +159,11 @@ const FamousNews = () => {
               </span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold font-[Supreme] leading-tight mb-4">
+            <h1 className="text-xl sm:text-3xl md:text-4xl font-bold font-[Supreme] leading-tight mb-4">
               {featuredArticle.title}
             </h1>
 
-            <p className="text-gray-600 text-lg mb-4 font-[Supreme]">
+            <p className="text-gray-600 mb-4 font-[Supreme]">
               {featuredArticle.description || "No description available for this article."}
             </p>
 
@@ -258,7 +258,7 @@ const FamousNews = () => {
                             {article.category}
                           </span>
                         </div>
-                        <h3 className="font-[Supreme] font-semibold text-base line-clamp-2 hover:text-red-500 transition-colors">
+                        <h3 className="font-[Supreme] text-base line-clamp-2 hover:text-red-500 transition-colors">
                           {article.title}
                         </h3>
                         <div className="flex items-center mt-2 text-xs text-gray-500">
