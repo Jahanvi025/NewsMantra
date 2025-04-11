@@ -7,17 +7,17 @@ export default defineConfig({
   server:{
     proxy: {
       "/api": {
-        target: "http://localhost:3000",
+        target: "https://newsmantra.onrender.com",
         changeOrigin: true,
         secure: false,
       },
       "/auth": {
-        target: "http://localhost:3000",
+        target: "https://newsmantra.onrender.com",
         changeOrigin: true,
         secure: false,
       },
       "/notes": {
-        target: "http://localhost:3000",
+        target: "https://newsmantra.onrender.com",
         changeOrigin: true,
         secure: false,
       },
