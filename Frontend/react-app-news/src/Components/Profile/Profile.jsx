@@ -26,7 +26,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-xl rounded-xl">
+    <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-xl rounded-xl mb-80">
       <div className="flex flex-col items-center space-y-4">
         <img
           src={`https://api.dicebear.com/7.x/initials/svg?seed=${user.username || "User"}`}

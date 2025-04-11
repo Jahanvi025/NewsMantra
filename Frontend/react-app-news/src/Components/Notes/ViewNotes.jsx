@@ -15,7 +15,7 @@ const ViewNotes = () => {
 
       if (user?.token) {
         try {
-          const res = await axios.get(`/article/single/${id}`, {
+          const res = await axios.get(`/notes/single/${id}`, {
             headers: { Authorization: `Bearer ${user.token}` },
           });
           setArticle(res.data.article);

@@ -1,4 +1,4 @@
-import react from "react";
+import React from "react";
 import { Toaster } from "react-hot-toast"
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import HomePage from "./Components/HomePage/HomePage";
@@ -22,175 +22,172 @@ import DifferentNewsPapers from "./Components/News/DifferentNewsPapers";
 import DifferentNewspaperArticlePage from "./Components/News/DifferentNewspaperArticlePage";
 
 function App() {
+  // Create a layout component to avoid repetition
+  const MainLayout = ({ children }) => (
+    <div>
+      <Navbar />
+      {children}
+      <Footer />
+    </div>
+  );
 
   const router = createBrowserRouter([
     {
       path: '/',
-      element:
-        <div>
-          <Navbar />
+      element: (
+        <MainLayout>
           <HomePage />
           <CurrentAffairs />
-          <Footer />
-        </div>
+        </MainLayout>
+      )
     },
     {
       path: '/news',
-      element:
-        <div>
-          <Navbar />
+      element: (
+        <MainLayout>
           <AllNews />
-          <Footer />
-        </div>
+        </MainLayout>
+      )
     },
     {
       path: '/news/times-of-india',
-      element:
-        <div>
-          <Navbar />
-          <DifferentNewsPapers/>
-          <Footer />
-        </div>
+      element: (
+        <MainLayout>
+          <DifferentNewsPapers />
+        </MainLayout>
+      )
     },
     {
       path: '/news/indian-express',
-      element:
-        <div>
-          <Navbar />
-          <DifferentNewsPapers/>
-          <Footer />
-        </div>
+      element: (
+        <MainLayout>
+          <DifferentNewsPapers />
+        </MainLayout>
+      )
     },
     {
       path: '/news/economic-times',
-      element:
-        <div>
-          <Navbar />
-          <DifferentNewsPapers/>
-          <Footer />
-        </div>
+      element: (
+        <MainLayout>
+          <DifferentNewsPapers />
+        </MainLayout>
+      )
     },
     {
       path: '/news/the-hindu',
-      element:
-        <div>
-          <Navbar />
-          <DifferentNewsPapers/>
-          <Footer />
-        </div>
+      element: (
+        <MainLayout>
+          <DifferentNewsPapers />
+        </MainLayout>
+      )
     },
     {
       path: '/news/hindustan-times',
-      element:
-        <div>
-          <Navbar />
-          <DifferentNewsPapers/>
-          <Footer />
-        </div>
+      element: (
+        <MainLayout>
+          <DifferentNewsPapers />
+        </MainLayout>
+      )
     },
     {
       path: '/news/currentnews/:id',
-      element:
-        <div>
-          <Navbar />
-          <CurrentNewsPage/>
-          <Footer />
-        </div>
+      element: (
+        <MainLayout>
+          <CurrentNewsPage />
+        </MainLayout>
+      )
     },
     {
       path: '/news/:category/:id',
-      element:
-        <div>
-          <Navbar />
+      element: (
+        <MainLayout>
           <NewsArticlePage />
-          <Footer />
-        </div>
+        </MainLayout>
+      )
     },
     {
       path: '/news/:newspaperName',
-      element:
-        <div>
-          <Navbar />
-         <DifferentNewspaperArticlePage/>
-          <Footer />
-        </div>
+      element: (
+        <MainLayout>
+          <DifferentNewspaperArticlePage />
+        </MainLayout>
+      )
     },
     {
       path: '/famous-stories',
-      element:
-        <div>
-          <Navbar />
+      element: (
+        <MainLayout>
           <FamousNews />
-          <Footer />
-        </div>
+        </MainLayout>
+      )
     },
     {
       path: '/articles',
-      element:
-        <div>
-          <Navbar />
-        <CreateAndUpdateNote />
-          <Footer />
-        </div>
+      element: (
+        <MainLayout>
+          <CreateAndUpdateNote />
+        </MainLayout>
+      )
     },
     {
       path: '/articles/:id',
-      element:
-        <div>
-          <Navbar />
-          <ViewNotes/>
-          <Footer />
-        </div>
+      element: (
+        <MainLayout>
+          <ViewNotes />
+        </MainLayout>
+      )
     },
     {
       path: '/about',
-      element:
-        <div>
-          <Navbar />
+      element: (
+        <MainLayout>
           <About />
-          <Footer />
-        </div>
+        </MainLayout>
+      )
     },
     {
       path: '/login',
-      element:
-        <div>
-          <Navbar />
+      element: (
+        <MainLayout>
           <Login />
-          <Footer />
-        </div>
+        </MainLayout>
+      )
     },
     {
       path: '/register',
-      element:
-        <div>
-          <Navbar />
+      element: (
+        <MainLayout>
           <Register />
-          <Footer />
-        </div>
+        </MainLayout>
+      )
     },
     {
       path: '/profile',
-      element:
-        <div>
-          <Navbar />
+      element: (
+        <MainLayout>
           <Profile />
-        </div>
+        </MainLayout>
+      )
+    },
+    {
+      path: '/contact',
+      element: (
+        <MainLayout>
+          <ContactUS />
+        </MainLayout>
+      )
     },
     {
       path: '*',
       element: <NotFound />
     }
-
-
-  ])
+  ]);
 
   return (
     <div>
       <RouterProvider router={router} />
       <NeonCursor />
       <Toaster position="top-right" reverseOrder={false} />
-
     </div>
   );
 }

@@ -28,11 +28,6 @@ export const articleSlice = createSlice({
         toast.error("Article not found")
       }
     },
-    resetAllarticles: (state) => {
-      state.articles = []
-      localStorage.removeItem("articles")
-      toast.success("All articles cleared")
-    },
     removeFromarticles: (state, action) => {
       const articleId = action.payload
       state.articles = state.articles.filter((item) => item._id !== articleId)
@@ -42,7 +37,7 @@ export const articleSlice = createSlice({
   },
 })
 
-export const { addToarticles, updateToarticles, resetAllarticles, removeFromarticles } = articleSlice.actions
+export const { addToarticles, updateToarticles, removeFromarticles } = articleSlice.actions
 
 export default articleSlice.reducer
 

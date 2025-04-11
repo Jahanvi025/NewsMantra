@@ -1,5 +1,5 @@
 import React from 'react';
-import newsimg from "../../assets/images/men-reading-newspaper-isolated-white-background.jpg";
+import newsimg from "../../assets/images/men-reading-newspaper-isolated-white-background.webp";
 import { Newspaper } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 import { motion } from "framer-motion";

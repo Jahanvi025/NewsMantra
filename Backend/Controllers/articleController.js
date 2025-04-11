@@ -1,22 +1,26 @@
 import Article from "../Model/articleModel.js";
 
-//  Get Articles (Public + User Specific)
 const getArticles = async (req, res) => {
     try {
-        // If `req.user` is not defined (User is not logged in), return 3 latest public articles
+        // Ensure the user is logged in
         if (!req.user) {
-            const publicArticles = await Article.find().sort({ createdAt: -1 }).limit(3);
-            return res.status(200).json({ message: "Showing public articles", success: true, articles: publicArticles });
+            return res.status(401).json({ message: "Unauthorized: Please log in to view your articles", success: false });
         }
-
-        // If logged in, fetch user-specific articles
+        console.log(req.user._id);
+        // Fetch articles created by the logged-in user
         const userArticles = await Article.find({ author: req.user._id }).sort({ createdAt: -1 });
-        res.status(200).json({ message: "Your articles", success: true, articles: userArticles });
+
+        res.status(200).json({
+            message: "Your articles",
+            success: true,
+            articles: userArticles
+        });
     } catch (error) {
         console.error("Error fetching articles:", error);
         res.status(500).json({ message: "Internal Server Error", success: false });
     }
 };
+
 
 //  Create Article (Only for Logged-in Users)
 const createArticle = async (req, res) => {

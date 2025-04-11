@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
 });
 
 app.use('/auth', authRouter);
-app.use('/article', articleRouter);
+app.use('/notes', articleRouter);
 app.use("/api", newsRouter);
 
 // 🚀 Start server
