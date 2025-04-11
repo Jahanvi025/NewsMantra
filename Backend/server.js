@@ -10,23 +10,10 @@ const app = express();
 dotenv.config();
 const PORT = process.env.PORT || 3000;
 
-const allowedOrigins = [
-    'http://localhost:5173',                    // ← Local dev
-    'https://newsmantra-frontend.onrender.com' // ← Deployed frontend
-];
-
-
 app.use(cors({
-    origin: function (origin, callback) {
-      // Allow requests with no origin (like Postman) or in the list
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
-    credentials: true
-  }));
+  origin: "https://newsmantra-frontend.onrender.com", // ✅ Specific origin, not '*'
+  credentials: true // ✅ Required if you're using cookies or auth headers
+}));
 // Middleware to parse JSON requests
 app.use(express.json());
 
