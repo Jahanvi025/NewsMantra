@@ -10,8 +10,6 @@ const app = express();
 dotenv.config();
 const PORT = process.env.PORT || 3000;
 
-import cors from "cors";
-
 const allowedOrigins = [
   "https://newsmantra-frontend.onrender.com",
   "http://localhost:5173"
