@@ -34,14 +34,11 @@ app.use("/auth", authRouter);
 app.use("/notes", articleRouter);
 app.use("/api", newsRouter);
 
-// ✅ Serve frontend static files
-const staticPath = path.join(__dirname, "./client/dist");
-app.use(express.static(staticPath));
-
-// ✅ Fallback to index.html for React Router
+app.use(express.static(path.join(__dirname, "./client/dist")));
 app.get("*", (req, res) => {
-  res.sendFile(path.join(staticPath, "index.html"));
-});
+    res.sendFile(path.join(__dirname, "./client/dist/index.html"));
+  });
+  
 
 // ✅ Start server
 app.listen(PORT, () => {
