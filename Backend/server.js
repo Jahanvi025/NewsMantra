@@ -16,6 +16,7 @@ const allowedOrigins = [
 ];
 
 app.use(cors({
+<<<<<<< HEAD
     origin: function (origin, callback) {
         if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
@@ -23,6 +24,9 @@ app.use(cors({
             callback(new Error("Not allowed by CORS"));
         }
     },
+=======
+    origin: "https://newsmantra-frontend.onrender.com", 
+>>>>>>> ae919e61dcb48a6baaf56c2332b0cfb1be75a31e
     credentials: true
 }));
 
