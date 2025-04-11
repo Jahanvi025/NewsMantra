@@ -15,21 +15,18 @@ const allowedOrigins = [
     'https://newsmantra-frontend.onrender.com' // ← Deployed frontend
 ];
 
-app.use(cors({
-<<<<<<< HEAD
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error("Not allowed by CORS"));
-        }
-    },
-=======
-    origin: "https://newsmantra-frontend.onrender.com", 
->>>>>>> ae919e61dcb48a6baaf56c2332b0cfb1be75a31e
-    credentials: true
-}));
 
+app.use(cors({
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like Postman) or in the list
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    credentials: true
+  }));
 // Middleware to parse JSON requests
 app.use(express.json());
 
