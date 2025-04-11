@@ -17,8 +17,8 @@ const PORT = process.env.PORT || 3000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// ✅ Serve frontend static files
-app.use(express.static(path.join(__dirname, "client/dist")));
+// ✅ Connect to database
+connectDB();
 
 // ✅ CORS Configuration
 app.use(cors({
@@ -26,20 +26,21 @@ app.use(cors({
   credentials: true,
 }));
 
-// ✅ JSON parsing middleware
+// ✅ Middleware
 app.use(express.json());
 
-// ✅ Connect to database
-connectDB();
-
 // ✅ API Routes
-app.use('/auth', authRouter);
-app.use('/notes', articleRouter);
+app.use("/auth", authRouter);
+app.use("/notes", articleRouter);
 app.use("/api", newsRouter);
+
+// ✅ Serve frontend static files
+const staticPath = path.join(__dirname, "./client/dist");
+app.use(express.static(staticPath));
 
 // ✅ Fallback to index.html for React Router
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/dist/index.html"));
+  res.sendFile(path.join(staticPath, "index.html"));
 });
 
 // ✅ Start server
