@@ -13,33 +13,37 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Required for path resolution in ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// ✅ Middleware
+// ✅ Connect to database
+connectDB();
+
+// ✅ CORS Configuration
 app.use(cors({
   origin: ["http://localhost:5173", "https://newsmantra-frontend.onrender.com"],
   credentials: true,
 }));
-app.use(express.json());
 
-// ✅ Connect DB
-connectDB();
+// ✅ Middleware
+app.use(express.json());
 
 // ✅ API Routes
 app.use("/auth", authRouter);
 app.use("/notes", articleRouter);
 app.use("/api", newsRouter);
 
-// ✅ Serve static files from dist/
-app.use(express.static(path.join(__dirname, "dist")));
+// ✅ Serve frontend static files
+const staticPath = path.join(__dirname, "./client/dist");
+app.use(express.static(staticPath));
 
-// ✅ Catch-all route for React Router
+// ✅ Fallback to index.html for React Router
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "dist", "index.html"));
+  res.sendFile(path.join(staticPath, "index.html"));
 });
 
-// ✅ Start Server
+// ✅ Start server
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on port ${PORT}`);
 });
