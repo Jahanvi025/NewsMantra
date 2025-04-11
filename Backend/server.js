@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3000;
 
 // Enable CORS for frontend communication
 app.use(cors({
-    origin: "http://localhost:5173", 
+    origin: "https://newsmantra-frontend.onrender.com", 
     credentials: true
   }));
 
