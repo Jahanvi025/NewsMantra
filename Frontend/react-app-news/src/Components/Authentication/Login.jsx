@@ -3,14 +3,42 @@ import { useForm } from "react-hook-form";
 import { Eye, EyeOff } from 'lucide-react';
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
+import {useGoogleLogin} from "@react-oauth/google";
 import googleicon from "../../assets/images/icons8-google.svg";
 import poster from "../../assets/images/loginimg.svg";
 import { motion } from "framer-motion";
+import { googleAuth } from '../../utils/api';
 
 const Login = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [serverError, setServerError] = useState("");
   const navigate = useNavigate();
+
+
+    const responseGoogle = async (authResult)=>{
+      try{
+        if(authResult['code']){
+          const result = await googleAuth(authResult['code']);
+          const {email, username} = result.data.user;
+          const token = result.data.token;
+          const obj = {token, email, username};
+          localStorage.setItem('user', JSON.stringify(obj));
+          //console.log(result.data.user);
+          window.dispatchEvent(new Event("userUpdated"))
+          navigate("/");
+        }
+        //console.log(authResult);
+      }
+      catch(error){
+        console.log('Error while requesting google code ', error);
+        
+      }
+    }
+    const googleLogin = useGoogleLogin({
+      onSuccess: responseGoogle,
+      onError: responseGoogle,
+      flow: 'auth-code'
+    })
 
   const {
     register,
@@ -22,14 +50,17 @@ const Login = () => {
     try {
       setServerError("");
       const res = await axios.post("/auth/login", data);
-     // console.log("Login response:", res.data);
   
       if (res.data.success) {
-        const { token, email, username } = res.data;
-
+        const { token, user } = res.data; 
   
-        // Store user and token in localStorage
-        localStorage.setItem("user", JSON.stringify({ token, username, email }));
+        localStorage.setItem("user", JSON.stringify({
+          token,
+          username: user.username,
+          email: user.email
+        }));
+  
+        window.dispatchEvent(new Event("userUpdated"));
         navigate("/");
       }
   
@@ -38,6 +69,7 @@ const Login = () => {
       setServerError(error.response?.data?.message || "Something went wrong");
     }
   };
+  
   
 
   return (
@@ -61,7 +93,7 @@ const Login = () => {
             </p>
           </motion.div>
 
-          <motion.button
+          <motion.button onClick={googleLogin}
             className='flex text-sm flex-row items-center justify-center space-x-2 font-[Supreme] border border-solid border-neutral-950 rounded-lg px-16 md:px-20 py-2 w-full'
             whileHover={{ scale: 1.05 }}
           >
@@ -104,7 +136,7 @@ const Login = () => {
                   className='placeholder:font-[Supreme] placeholder:select-none placeholder:text-black placeholder:text-sm border border-solid border-neutral-950 rounded-lg pl-5 pr-10 py-2 w-full px-16 md:px-20'
                   {...register("password", {
                     required: "Password is required",
-                    minLength: { value: 8, message: "Minimum 8 characters required" }
+                    minLength: { value: 6, message: "Minimum 6 characters required" }
                   })}
                 />
                 <div

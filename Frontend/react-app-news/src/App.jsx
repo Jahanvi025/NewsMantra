@@ -20,6 +20,7 @@ import CreateAndUpdateNote from "./Components/Notes/CreateAndUpdateNote";
 import NewsArticlePage from "./Components/News/NewsArticlePage";
 import DifferentNewsPapers from "./Components/News/DifferentNewsPapers";
 import DifferentNewspaperArticlePage from "./Components/News/DifferentNewspaperArticlePage";
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 function App() {
   // Create a layout component to avoid repetition
@@ -184,10 +185,13 @@ function App() {
   ]);
 
   return (
+
     <div>
+      <GoogleOAuthProvider clientId="815700070300-p0mgu0u2q2dshg4t59cci926c9bj8ssr.apps.googleusercontent.com">
       <RouterProvider router={router} />
       <NeonCursor />
       <Toaster position="top-right" reverseOrder={false} />
+      </GoogleOAuthProvider>
     </div>
   );
 }

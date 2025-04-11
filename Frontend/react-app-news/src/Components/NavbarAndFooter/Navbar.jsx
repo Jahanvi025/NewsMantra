@@ -17,7 +17,11 @@ const Navbar = () => {
     }
   })
 
-
+  const [showWelcome, setShowWelcome] = useState(() => {
+    const stored = sessionStorage.getItem("hasSeenWelcome")
+    return !stored && !localStorage.getItem("user") // only show if not seen before AND no user
+  })
+  
   const dropdownRef = useRef(null)
   const navigate = useNavigate()
 
@@ -61,13 +65,35 @@ const Navbar = () => {
   }, [isOpen])
 
   useEffect(() => {
+    const handleUserUpdate = () => {
+      const stored = localStorage.getItem("user")
+      setUser(stored ? JSON.parse(stored) : null)
+    }
+  
+    window.addEventListener("userUpdated", handleUserUpdate)
+    return () => window.removeEventListener("userUpdated", handleUserUpdate)
+  }, [])
+  
+
+  useEffect(() => {
     const handleStorage = () => {
       const stored = localStorage.getItem("user")
       setUser(stored ? JSON.parse(stored) : null)
     }
+    
     window.addEventListener("storage", handleStorage)
     return () => window.removeEventListener("storage", handleStorage)
   }, [])
+
+  useEffect(() => {
+    if (showWelcome) {
+      const timer = setTimeout(() => {
+        setShowWelcome(false)
+        sessionStorage.setItem("hasSeenWelcome", "true")
+      }, 3000) // 3 seconds animation
+      return () => clearTimeout(timer)
+    }
+  }, [showWelcome])
 
   const newspapers = [
     { name: "Times of India", href: "/news/times-of-india" },
@@ -101,6 +127,33 @@ const Navbar = () => {
       {children}
     </button>
   )
+
+  // 👇 Welcome screen overlay
+  if (showWelcome) {
+    return (
+      <div className="fixed inset-0 bg-black flex items-center justify-center z-50 transition-opacity duration-1000 ease-in-out">
+        <h1 className="text-white text-4xl md:text-4xl font-bold animate-fade-in-up font-[Supreme]">
+          Welcome to NewsMantra!
+        </h1>
+        <style>
+          {`
+          .animate-fade-in-up {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1.2s ease-out forwards;
+          }
+
+          @keyframes fadeInUp {
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+        `}
+        </style>
+      </div>
+    )
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-gray-300 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

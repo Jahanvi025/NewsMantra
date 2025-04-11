@@ -6,8 +6,9 @@ const Profile = () => {
   useEffect(() => {
     try {
       const rawUser = localStorage.getItem("user")
+      console.log(rawUser);
       const parsedUser = JSON.parse(rawUser)
-      console.log("Parsed user:", parsedUser)
+      //console.log("Parsed user:", parsedUser)
 
       if (parsedUser) {
         setUser(parsedUser)

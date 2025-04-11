@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import { Eye, EyeOff } from 'lucide-react';
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
+import { useGoogleLogin } from '@react-oauth/google';
+import { googleAuth } from "../../utils/api";
 import googleicon from "../../assets/images/icons8-google.svg";
 import poster from "../../assets/images/loginimg.svg";
 import { motion } from "framer-motion";
@@ -35,6 +37,32 @@ const Register = () => {
     }
   };
 
+  const responseGoogle = async (authResult) => {
+    try {
+      if (authResult['code']) {
+        const result = await googleAuth(authResult['code']);
+        const { email, username } = result.data.user;
+        const token = result.data.token;
+
+        const userData = { token, email, username };
+        localStorage.setItem('user', JSON.stringify(userData));
+        window.dispatchEvent(new Event("userUpdated")) 
+        toast.success("Google signup successful!");
+        
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Error during Google signup:", error);
+      toast.error("Google signup failed");
+    }
+  };
+
+  const googleSignup = useGoogleLogin({
+    onSuccess: responseGoogle,
+    onError: responseGoogle,
+    flow: 'auth-code',
+  });
+
   return (
     <div className='relative p-6 md:p-12'>
       <motion.div 
@@ -57,6 +85,7 @@ const Register = () => {
           <motion.button 
             className='flex text-sm flex-row items-center justify-center space-x-2 font-[Supreme] border border-solid border-neutral-950 rounded-lg px-16 md:px-20 py-2 w-full'
             whileHover={{ scale: 1.05 }}
+            onClick={googleSignup}
           >
             <img src={googleicon} alt="Google Logo" className="w-6 h-6" />
             <span className='text-neutral-950'>Continue with Google</span>
@@ -103,7 +132,7 @@ const Register = () => {
                   className='placeholder:font-[Supreme] border border-solid border-neutral-950 rounded-lg pl-5 pr-10 py-2 placeholder:text-sm placeholder:text-black w-full' 
                   {...register("password", {
                     required: "Password is required",
-                    minLength: { value: 8, message: "Minimum 8 characters required" }
+                    minLength: { value: 6, message: "Minimum 6 characters required" }
                   })} 
                 />
                 <div
