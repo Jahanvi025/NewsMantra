@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
+import api from "../../utils/api.js";
 import {  Loader2 } from "lucide-react"
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { useNavigate } from "react-router-dom";
@@ -35,7 +36,7 @@ const AllNews = () => {
     setError(null)
 
     try {
-      const response = await axios.get(`/api/news-by-category?category=${selectedCategory}`
+      const response = await api.get(`/api/news-by-category?category=${selectedCategory}`
       )
 
       if (response.data.articles && response.data.articles.length > 0) {

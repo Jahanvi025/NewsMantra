@@ -10,11 +10,21 @@ const app = express();
 dotenv.config();
 const PORT = process.env.PORT || 3000;
 
-// Enable CORS for frontend communication
+const allowedOrigins = [
+    'http://localhost:5173',                    // ← Local dev
+    'https://newsmantra-frontend.onrender.com' // ← Deployed frontend
+];
+
 app.use(cors({
-    origin: "http://localhost:5173", 
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
     credentials: true
-  }));
+}));
 
 // Middleware to parse JSON requests
 app.use(express.json());

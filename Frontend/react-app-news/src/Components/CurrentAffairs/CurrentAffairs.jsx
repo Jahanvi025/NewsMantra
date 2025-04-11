@@ -1,8 +1,10 @@
 import { TrendingUp } from "lucide-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import api from "../../utils/api.js";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { useNavigate } from "react-router-dom";
+
 
 const CurrentAffairs = () => {
   const [articles, setArticles] = useState([]);
@@ -16,7 +18,7 @@ const CurrentAffairs = () => {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await axios.get("/api/current-affairs");
+        const response = await api.get("/api/current-affairs");
         setArticles((response.data.articles || []).reverse()); // Newest articles first
       } catch (error) {
         console.error("Error fetching news:", error);

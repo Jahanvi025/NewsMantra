@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../../utils/axiosInstance.js";
 import { format } from "date-fns";
 import { Clock, Calendar } from "lucide-react";
 
@@ -15,7 +15,7 @@ const ViewNotes = () => {
 
       if (user?.token) {
         try {
-          const res = await axios.get(`/notes/single/${id}`, {
+          const res = await axiosInstance.get(`/single/${id}`, {
             headers: { Authorization: `Bearer ${user.token}` },
           });
           setArticle(res.data.article);

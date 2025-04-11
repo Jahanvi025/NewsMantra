@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import axios from "axios"
+import api from "../../utils/api.js";
 import { format } from "date-fns"
 import { ArrowLeft, Calendar, Clock, Globe, Share2, Bookmark, Printer, Eye } from "lucide-react"
 
@@ -19,7 +20,7 @@ const CurrentNewsPage = () => {
       try {
         setLoading(true)
         // Fetch all articles first
-        const response = await axios.get("/api/current-affairs")
+        const response = await api.get("/api/current-affairs")
         const allArticles = response.data.articles || []
 
         // Get the specific article by index

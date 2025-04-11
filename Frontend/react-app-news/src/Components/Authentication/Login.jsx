@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { Eye, EyeOff } from 'lucide-react';
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
+import api from "../../utils/api.js";
 import {useGoogleLogin} from "@react-oauth/google";
 import googleicon from "../../assets/images/icons8-google.svg";
 import poster from "../../assets/images/loginimg.svg";
@@ -49,7 +50,7 @@ const Login = () => {
   const onSubmit = async (data) => {
     try {
       setServerError("");
-      const res = await axios.post("/auth/login", data);
+      const res = await api.post("/auth/login", data);
   
       if (res.data.success) {
         const { token, user } = res.data; 

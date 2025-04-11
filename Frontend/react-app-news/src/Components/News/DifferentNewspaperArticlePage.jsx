@@ -11,6 +11,7 @@ import {
     Printer,
     Eye
 } from "lucide-react"
+import api from "../../utils/api.js";
 
 const DifferentNewspaperArticlePage = () => {
     const { newspaperName } = useParams()
@@ -27,30 +28,32 @@ const DifferentNewspaperArticlePage = () => {
 
     useEffect(() => {
         const fetchArticleData = async () => {
-            try {
-                setLoading(true)
-
-                const response = await fetch(`/api/fetch-diff-newspaper?source=${encodeURIComponent(newspaperName)}`)
-                const data = await response.json()
-                const articles = Array.isArray(data) ? data : data.articles || []
-
-                if (isNaN(index) || index < 0 || index >= articles.length) {
-                    throw new Error("Invalid article index")
-                }
-
-                setArticle(articles[index])
-                setRelatedArticles(articles.filter((_, i) => i !== index).slice(0, 3))
-                setError("")
-            } catch (err) {
-                console.error(err)
-                setError("Failed to load article.")
-            } finally {
-                setLoading(false)
+          try {
+            setLoading(true);
+      
+            const response = await api.get(`/api/fetch-diff-newspaper?source=${encodeURIComponent(newspaperName)}`);
+            const data = response.data; // Axios automatically parses JSON
+      
+            const articles = Array.isArray(data) ? data : data.articles || [];
+      
+            if (isNaN(index) || index < 0 || index >= articles.length) {
+              throw new Error("Invalid article index");
             }
-        }
-
-        fetchArticleData()
-    }, [newspaperName, index])
+      
+            setArticle(articles[index]);
+            setRelatedArticles(articles.filter((_, i) => i !== index).slice(0, 3));
+            setError("");
+          } catch (err) {
+            console.error(err);
+            setError("Failed to load article.");
+          } finally {
+            setLoading(false);
+          }
+        };
+      
+        fetchArticleData();
+      }, [newspaperName, index]);
+      
 
     const publishedDate = article?.publishedAt ? format(new Date(article.publishedAt), "MMMM dd, yyyy") : "Unknown date"
     const publishedTime = article?.publishedAt ? format(new Date(article.publishedAt), "h:mm a") : ""

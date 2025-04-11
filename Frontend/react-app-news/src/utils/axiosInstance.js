@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const axiosInstance = axios.create({
-  baseURL: "/notes", // proxy handles the actual target (http://localhost:4000)
+  baseURL: `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/notes`,
 })
 
 // Automatically attach token to every request if available

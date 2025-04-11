@@ -7,7 +7,6 @@ import Navbar from "./Components/NavbarAndFooter/Navbar";
 import Footer from "./Components/NavbarAndFooter/Footer";
 import AllNews from "./Components/News/AllNews";
 import FamousNews from "./Components/FamousNews/FamousNews";
-import ContactUS from "./Components/ContactPage/ContactUS";
 import NotFound from "./Components/NotFound/NotFound";
 import About from "./Components/About/About";
 import Login from "./Components/Authentication/Login";
@@ -167,14 +166,6 @@ function App() {
       element: (
         <MainLayout>
           <Profile />
-        </MainLayout>
-      )
-    },
-    {
-      path: '/contact',
-      element: (
-        <MainLayout>
-          <ContactUS />
         </MainLayout>
       )
     },

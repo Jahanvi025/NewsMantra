@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import axios from "axios"
+import api from "../../utils/api.js";
 import { format } from "date-fns"
 import {
   ArrowLeft,
@@ -26,7 +27,7 @@ export default function NewsArticlePage() {
     const fetchArticleDetails = async () => {
       try {
         setLoading(true)
-        const response = await axios.get(`/api/news-by-category?category=${category}`)
+        const response = await api.get(`/api/news-by-category?category=${category}`)
         const allArticles = response.data.articles || []
 
         const currentIndex = parseInt(id)

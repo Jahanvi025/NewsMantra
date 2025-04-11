@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { Loader2 } from "lucide-react"
+import api from "../../utils/api.js";
 import { formatDistanceToNow, parseISO } from "date-fns"
 
 const DifferentNewsPapers = () => {
@@ -30,27 +31,27 @@ const DifferentNewsPapers = () => {
 
   useEffect(() => {
     const fetchNews = async () => {
-      setLoading(true)
+      setLoading(true);
       try {
-        const response = await fetch(`/api/fetch-diff-newspaper?source=${encodeURIComponent(newspaperName)}`)
-        if (!response.ok) throw new Error("Failed to fetch news")
-        const data = await response.json()
+        const response = await api.get(`/api/fetch-diff-newspaper?source=${encodeURIComponent(newspaperName)}`);
+        const data = response.data;
   
         // Fix: Ensure data is an array
-        const articleArray = Array.isArray(data) ? data : data.articles || []
+        const articleArray = Array.isArray(data) ? data : data.articles || [];
   
-        setArticles(articleArray)
-        setError(null)
+        setArticles(articleArray);
+        setError(null);
       } catch (err) {
-        console.error("Failed to fetch news:", err)
-        setError("Failed to load news. Please try again later.")
+        console.error("Failed to fetch news:", err);
+        setError("Failed to load news. Please try again later.");
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
   
-    fetchNews()
-  }, [newspaperName])
+    fetchNews();
+  }, [newspaperName]);
+  
   
 
   return (

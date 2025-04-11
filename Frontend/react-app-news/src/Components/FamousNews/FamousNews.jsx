@@ -1,7 +1,6 @@
-"use client"
-
 import { useEffect, useState } from "react"
 import axios from "axios"
+import api from "../../utils/api.js";
 import { format } from "date-fns"
 import { ArrowRight, Clock } from "lucide-react"
 
@@ -87,7 +86,7 @@ const FamousNews = () => {
         setLoading(true)
 
         // Fetch famous headlines
-        const headlinesResponse = await axios.get("/api/famous-headlines")
+        const headlinesResponse = await api.get("/api/famous-headlines")
         const headlinesArticles = headlinesResponse.data.articles.reverse() || []
 
         if (headlinesArticles.length > 0) {

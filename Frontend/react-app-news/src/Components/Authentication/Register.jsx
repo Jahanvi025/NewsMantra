@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { Eye, EyeOff } from 'lucide-react';
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
+import api from "../../utils/api.js";
 import { useGoogleLogin } from '@react-oauth/google';
 import { googleAuth } from "../../utils/api";
 import googleicon from "../../assets/images/icons8-google.svg";
@@ -25,7 +26,7 @@ const Register = () => {
   const onSubmit = async (data) => {
     try {
       setServerError("");
-      const res = await axios.post("/auth/register", data);
+      const res = await api.post("/auth/register", data);
       if (res.data.success) {
         toast.success("Signup successful! You can now log in.");
         reset();
