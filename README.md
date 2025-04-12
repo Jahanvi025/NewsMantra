@@ -2,10 +2,6 @@
 
 Stay updated with the latest news, trending stories, and current affairs — all in one place. **NewsMantra** is a full-stack web app that allows users to explore news from top Indian newspapers and create their own article collections. 🌏✨
 
-## 🔗 Live Demo
-
-👉 [NewsMantra](https://newsmantra-frontend.onrender.com)
-
 ---
 
 ## ✨ Features
